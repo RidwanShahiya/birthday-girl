@@ -30,7 +30,7 @@
       position: fixed;
       inset: 0;
       width: 100vw;
-      height: 100vh;
+      height: 100svh;
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -40,27 +40,30 @@
 
     .stage {
       position: relative;
-      width: 1080px;
-      height: 2400px;
+      width: min(100vw, calc(100svh * 9 / 20));
+      height: min(100svh, calc(100vw * 20 / 9));
+      max-width: 1080px;
+      max-height: 2400px;
       overflow: hidden;
-      transform-origin: center center;
+      background: #000000;
     }
 
-    /* Background video portrait 1080 x 2400 */
+    /* Background video portrait */
     .background-video {
       position: absolute;
       inset: 0;
-      width: 1080px;
-      height: 2400px;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      z-index: -1;
+      z-index: 0;
     }
 
     .page {
       position: relative;
-      width: 1080px;
-      height: 2400px;
-      padding-top: 160px;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      padding-top: 6.5%;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -68,40 +71,48 @@
     }
 
     .name-section {
+      width: 100%;
       text-align: center;
-      margin-bottom: 70px;
+      margin-bottom: 4.2%;
+      padding: 0 4%;
     }
 
     .name-section h1 {
       font-family: "Great Vibes", cursive;
-      font-size: 88px;
+      font-size: clamp(42px, 9vw, 88px);
       font-weight: 400;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       color: #ffffff;
       text-shadow: 0 5px 18px rgba(0, 0, 0, 0.75);
+      white-space: nowrap;
     }
 
     .countdown-section {
+      width: 100%;
       text-align: center;
-      margin-bottom: 110px;
+      margin-bottom: 6.5%;
+      padding: 0 4%;
     }
 
     .countdown-title {
-      font-size: 34px;
+      font-size: clamp(16px, 4vw, 34px);
       font-weight: 500;
-      margin-bottom: 30px;
+      margin-bottom: 4%;
       color: #ffffff;
       text-shadow: 0 4px 14px rgba(0, 0, 0, 0.75);
+      white-space: nowrap;
     }
 
     .countdown {
       display: flex;
       justify-content: center;
-      gap: 24px;
+      align-items: center;
+      gap: 3.2%;
+      width: 100%;
     }
 
     .time-card {
-      min-width: 135px;
+      width: 18%;
       text-align: center;
       color: #ffffff;
       text-shadow: 0 4px 14px rgba(0, 0, 0, 0.8);
@@ -109,28 +120,30 @@
 
     .time-card span {
       display: block;
-      font-size: 62px;
+      font-size: clamp(26px, 7vw, 62px);
       font-weight: 600;
       line-height: 1;
     }
 
     .time-card small {
       display: block;
-      margin-top: 8px;
-      font-size: 21px;
+      margin-top: 8%;
+      font-size: clamp(10px, 2.6vw, 21px);
       font-weight: 500;
     }
 
     .envelope-section {
       display: flex;
       justify-content: center;
-      margin-bottom: 130px;
+      width: 100%;
+      margin-bottom: 7%;
     }
 
     .envelope-box {
       position: relative;
-      width: 700px;
-      height: 800px;
+      width: 65%;
+      max-width: 700px;
+      aspect-ratio: 7 / 8;
       overflow: hidden;
       border-radius: 12px;
       cursor: not-allowed;
@@ -142,8 +155,8 @@
     }
 
     .envelope-video {
-      width: 700px;
-      height: 800px;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       display: block;
     }
@@ -151,25 +164,26 @@
     .slider-area {
       position: absolute;
       left: 50%;
-      bottom: 135px;
-      width: 1080px;
+      bottom: 5.5%;
+      width: 100%;
       overflow: hidden;
       padding: 10px 0;
       transform: translateX(-50%);
+      z-index: 3;
     }
 
     .slider-track {
       display: flex;
       justify-content: center;
-      gap: 55px;
+      gap: 5vw;
       width: max-content;
       animation: slideLeft 55s linear infinite;
     }
 
     .slide-card {
-      width: 300px;
-      height: 400px;
-      flex: 0 0 300px;
+      width: min(28vw, 300px);
+      aspect-ratio: 3 / 4;
+      flex: 0 0 min(28vw, 300px);
       overflow: hidden;
       border-radius: 10px;
       background: rgba(255, 255, 255, 0.2);
@@ -177,8 +191,8 @@
     }
 
     .slide-card img {
-      width: 300px;
-      height: 400px;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       display: block;
     }
@@ -195,8 +209,8 @@
     canvas#confettiCanvas {
       position: absolute;
       inset: 0;
-      width: 1080px;
-      height: 2400px;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
       z-index: 9999;
     }
@@ -208,7 +222,7 @@
   <div class="viewport">
     <div class="stage" id="stage">
 
-      <!-- Background video portrait 1080 x 2400 -->
+      <!-- Background video portrait -->
       <video class="background-video" autoplay muted loop playsinline>
         <source src="background-video.mp4" type="video/mp4">
       </video>
@@ -387,10 +401,12 @@
     let confettiRunning = false;
 
     function resizeCanvas() {
-      canvas.width = 1080;
-      canvas.height = 2400;
+      const stage = document.getElementById("stage");
+      canvas.width = stage.clientWidth;
+      canvas.height = stage.clientHeight;
     }
 
+    window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
 
     function createConfetti() {
@@ -451,6 +467,8 @@
     }
 
     function startConfetti() {
+      resizeCanvas();
+
       confettiPieces = [];
       confettiRunning = true;
       createConfetti();
@@ -461,24 +479,6 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }, 10000);
     }
-
-    function scaleWebsite() {
-      const stage = document.getElementById("stage");
-
-      const designWidth = 1080;
-      const designHeight = 2400;
-
-      const scaleX = window.innerWidth / designWidth;
-      const scaleY = window.innerHeight / designHeight;
-
-      const scale = Math.min(scaleX, scaleY);
-
-      stage.style.transform = `scale(${scale})`;
-    }
-
-    window.addEventListener("resize", scaleWebsite);
-    window.addEventListener("load", scaleWebsite);
-    scaleWebsite();
   </script>
 
 </body>
