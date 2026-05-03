@@ -164,7 +164,7 @@
       cursor: pointer;
     }
 
-    .envelope-video {
+    .envelope-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -279,9 +279,7 @@
 
         <section class="envelope-section">
           <div id="envelopeBox" class="envelope-box locked">
-            <video id="envelopeVideo" class="envelope-video" playsinline>
-              <source src="video-amplop.mp4" type="video/mp4">
-            </video>
+            <img id="envelopeImage" class="envelope-image" src="amplop-awal.png" alt="Amplop">
           </div>
         </section>
 
@@ -328,7 +326,10 @@
     const secondsEl = document.getElementById("seconds");
 
     const envelopeBox = document.getElementById("envelopeBox");
-    const envelopeVideo = document.getElementById("envelopeVideo");
+    const envelopeImage = document.getElementById("envelopeImage");
+
+    const openedEnvelope = new Image();
+    openedEnvelope.src = "amplop-buka.png";
 
     let countdownFinished = false;
     let alreadyClicked = false;
@@ -376,8 +377,7 @@
 
       alreadyClicked = true;
 
-      envelopeVideo.currentTime = 0;
-      envelopeVideo.play();
+      envelopeImage.src = "amplop-buka.png";
 
       startConfetti();
 
