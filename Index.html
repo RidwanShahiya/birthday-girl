@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Countdown - Maylia Nur Shakinah</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Poppins", sans-serif;
+      color: #ffffff;
+      background: #000000;
+    }
+
+    .viewport {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000000;
+    }
+
+    .stage {
+      position: relative;
+      width: 1080px;
+      height: 2400px;
+      overflow: hidden;
+      transform-origin: center center;
+    }
+
+    /* Background video portrait 1080 x 2400 */
+    .background-video {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 2400px;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .page {
+      position: relative;
+      width: 1080px;
+      height: 2400px;
+      padding-top: 160px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .name-section {
+      text-align: center;
+      margin-bottom: 70px;
+    }
+
+    .name-section h1 {
+      font-family: "Great Vibes", cursive;
+      font-size: 88px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      color: #ffffff;
+      text-shadow: 0 5px 18px rgba(0, 0, 0, 0.75);
+    }
+
+    .countdown-section {
+      text-align: center;
+      margin-bottom: 110px;
+    }
+
+    .countdown-title {
+      font-size: 34px;
+      font-weight: 500;
+      margin-bottom: 30px;
+      color: #ffffff;
+      text-shadow: 0 4px 14px rgba(0, 0, 0, 0.75);
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    .time-card {
+      min-width: 135px;
+      text-align: center;
+      color: #ffffff;
+      text-shadow: 0 4px 14px rgba(0, 0, 0, 0.8);
+    }
+
+    .time-card span {
+      display: block;
+      font-size: 62px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .time-card small {
+      display: block;
+      margin-top: 8px;
+      font-size: 21px;
+      font-weight: 500;
+    }
+
+    .envelope-section {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 130px;
+    }
+
+    .envelope-box {
+      position: relative;
+      width: 700px;
+      height: 800px;
+      overflow: hidden;
+      border-radius: 12px;
+      cursor: not-allowed;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .envelope-box.active {
+      cursor: pointer;
+    }
+
+    .envelope-video {
+      width: 700px;
+      height: 800px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .slider-area {
+      position: absolute;
+      left: 50%;
+      bottom: 135px;
+      width: 1080px;
+      overflow: hidden;
+      padding: 10px 0;
+      transform: translateX(-50%);
+    }
+
+    .slider-track {
+      display: flex;
+      justify-content: center;
+      gap: 55px;
+      width: max-content;
+      animation: slideLeft 55s linear infinite;
+    }
+
+    .slide-card {
+      width: 300px;
+      height: 400px;
+      flex: 0 0 300px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .slide-card img {
+      width: 300px;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+    }
+
+    @keyframes slideLeft {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    canvas#confettiCanvas {
+      position: absolute;
+      inset: 0;
+      width: 1080px;
+      height: 2400px;
+      pointer-events: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="viewport">
+    <div class="stage" id="stage">
+
+      <!-- Background video portrait 1080 x 2400 -->
+      <video class="background-video" autoplay muted loop playsinline>
+        <source src="background-video.mp4" type="video/mp4">
+      </video>
+
+      <canvas id="confettiCanvas"></canvas>
+
+      <!-- Lagu dari file di folder yang sama -->
+      <audio id="birthdayMusic" autoplay loop>
+        <source src="lagu-ulang-tahun.mp3" type="audio/mpeg">
+      </audio>
+
+      <main class="page">
+
+        <section class="name-section">
+          <h1>Maylia Nur Shakinah</h1>
+        </section>
+
+        <section class="countdown-section">
+          <div class="countdown-title">Countdown Ulang Tahun</div>
+
+          <div class="countdown">
+            <div class="time-card">
+              <span id="days">0</span>
+              <small>Hari</small>
+            </div>
+
+            <div class="time-card">
+              <span id="hours">0</span>
+              <small>Jam</small>
+            </div>
+
+            <div class="time-card">
+              <span id="minutes">0</span>
+              <small>Menit</small>
+            </div>
+
+            <div class="time-card">
+              <span id="seconds">0</span>
+              <small>Detik</small>
+            </div>
+          </div>
+        </section>
+
+        <section class="envelope-section">
+          <div id="envelopeBox" class="envelope-box locked">
+            <video id="envelopeVideo" class="envelope-video" playsinline>
+              <source src="video-amplop.mp4" type="video/mp4">
+            </video>
+          </div>
+        </section>
+
+        <section class="slider-area">
+          <div class="slider-track" id="sliderTrack">
+
+            <div class="slide-card"><img src="slide1.jpg"></div>
+            <div class="slide-card"><img src="slide2.jpg"></div>
+            <div class="slide-card"><img src="slide3.jpg"></div>
+            <div class="slide-card"><img src="slide4.jpg"></div>
+            <div class="slide-card"><img src="slide5.jpg"></div>
+            <div class="slide-card"><img src="slide6.jpg"></div>
+            <div class="slide-card"><img src="slide7.jpg"></div>
+            <div class="slide-card"><img src="slide8.jpg"></div>
+            <div class="slide-card"><img src="slide9.jpg"></div>
+            <div class="slide-card"><img src="slide10.jpg"></div>
+            <div class="slide-card"><img src="slide11.jpg"></div>
+            <div class="slide-card"><img src="slide12.jpg"></div>
+            <div class="slide-card"><img src="slide13.jpg"></div>
+            <div class="slide-card"><img src="slide14.jpg"></div>
+            <div class="slide-card"><img src="slide15.jpg"></div>
+            <div class="slide-card"><img src="slide16.jpg"></div>
+            <div class="slide-card"><img src="slide17.jpg"></div>
+            <div class="slide-card"><img src="slide18.jpg"></div>
+            <div class="slide-card"><img src="slide19.jpg"></div>
+            <div class="slide-card"><img src="slide20.jpg"></div>
+            <div class="slide-card"><img src="slide21.jpg"></div>
+            <div class="slide-card"><img src="slide22.jpg"></div>
+
+          </div>
+        </section>
+
+      </main>
+
+    </div>
+  </div>
+
+  <script>
+    const targetDate = new Date("May 12, 2026 00:00:00").getTime();
+
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+
+    const envelopeBox = document.getElementById("envelopeBox");
+    const envelopeVideo = document.getElementById("envelopeVideo");
+
+    let countdownFinished = false;
+    let alreadyClicked = false;
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance <= 0) {
+        countdownFinished = true;
+
+        daysEl.textContent = "0";
+        hoursEl.textContent = "0";
+        minutesEl.textContent = "0";
+        secondsEl.textContent = "0";
+
+        envelopeBox.classList.remove("locked");
+        envelopeBox.classList.add("active");
+
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
+
+      daysEl.textContent = days;
+      hoursEl.textContent = hours;
+      minutesEl.textContent = minutes;
+      secondsEl.textContent = seconds;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    envelopeBox.addEventListener("click", () => {
+      if (!countdownFinished) {
+        return;
+      }
+
+      if (alreadyClicked) {
+        return;
+      }
+
+      alreadyClicked = true;
+
+      envelopeVideo.currentTime = 0;
+      envelopeVideo.play();
+
+      startConfetti();
+
+      setTimeout(() => {
+        window.location.href = "page-kosong.html";
+      }, 10000);
+    });
+
+    const sliderTrack = document.getElementById("sliderTrack");
+    sliderTrack.innerHTML += sliderTrack.innerHTML;
+
+    const music = document.getElementById("birthdayMusic");
+
+    function playMusic() {
+      music.play().catch(() => {});
+    }
+
+    window.addEventListener("load", playMusic);
+
+    document.addEventListener("click", () => {
+      playMusic();
+    }, { once: true });
+
+    document.addEventListener("touchstart", () => {
+      playMusic();
+    }, { once: true });
+
+    const canvas = document.getElementById("confettiCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let confettiPieces = [];
+    let confettiRunning = false;
+
+    function resizeCanvas() {
+      canvas.width = 1080;
+      canvas.height = 2400;
+    }
+
+    resizeCanvas();
+
+    function createConfetti() {
+      const colors = [
+        "#ff3838",
+        "#ff9f1a",
+        "#fff200",
+        "#32ff7e",
+        "#18dcff",
+        "#7d5fff",
+        "#ff4dca",
+        "#ffffff"
+      ];
+
+      for (let i = 0; i < 450; i++) {
+        confettiPieces.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height,
+          size: Math.random() * 10 + 5,
+          speed: Math.random() * 7 + 4,
+          drift: Math.random() * 4 - 2,
+          rotation: Math.random() * 360,
+          rotationSpeed: Math.random() * 12 - 6,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      confettiPieces.forEach(piece => {
+        ctx.save();
+        ctx.translate(piece.x, piece.y);
+        ctx.rotate(piece.rotation * Math.PI / 180);
+        ctx.fillStyle = piece.color;
+        ctx.fillRect(
+          -piece.size / 2,
+          -piece.size / 2,
+          piece.size,
+          piece.size * 0.55
+        );
+        ctx.restore();
+
+        piece.y += piece.speed;
+        piece.x += piece.drift;
+        piece.rotation += piece.rotationSpeed;
+
+        if (piece.y > canvas.height + 30) {
+          piece.y = Math.random() * -canvas.height;
+          piece.x = Math.random() * canvas.width;
+        }
+      });
+
+      if (confettiRunning) {
+        requestAnimationFrame(drawConfetti);
+      }
+    }
+
+    function startConfetti() {
+      confettiPieces = [];
+      confettiRunning = true;
+      createConfetti();
+      drawConfetti();
+
+      setTimeout(() => {
+        confettiRunning = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }, 10000);
+    }
+
+    function scaleWebsite() {
+      const stage = document.getElementById("stage");
+
+      const designWidth = 1080;
+      const designHeight = 2400;
+
+      const scaleX = window.innerWidth / designWidth;
+      const scaleY = window.innerHeight / designHeight;
+
+      const scale = Math.min(scaleX, scaleY);
+
+      stage.style.transform = `scale(${scale})`;
+    }
+
+    window.addEventListener("resize", scaleWebsite);
+    window.addEventListener("load", scaleWebsite);
+    scaleWebsite();
+  </script>
+
+</body>
+</html>
